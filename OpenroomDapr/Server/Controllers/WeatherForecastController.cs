@@ -26,12 +26,20 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Get), nameof(PersonController));
+        Stopwatch stopwatch = Stopwatch.StartNew();
+        IEnumerable<WeatherForecast> result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
             Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
             TemperatureC = Random.Shared.Next(-20, 55),
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+        stopwatch.Stop();
+        _logger.LogInformation("End {methodname} in {classname}", nameof(Get), nameof(PersonController));
+        _logger.LogInformation("PerfMatters: {methodname} in {classname} returned in {stopwatchmilliseconds} milliseconds",
+            nameof(Get), nameof(PersonController), stopwatch.ElapsedMilliseconds);
+        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Get), nameof(PersonController));
+        return result;
     }
 }

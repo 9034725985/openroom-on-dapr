@@ -1,29 +1,39 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Identity.Web;
+using OpenroomDapr.Server.Services;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//// Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
-builder.Services.AddControllersWithViews();
+// Add services to the container.
 builder.Services.AddRazorPages();
-
-var app = builder.Build();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddTransient<IPersonDataAccess, PersonDataAccess>((services) =>
+{
+    return new PersonDataAccess(
+        services.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
+        services.GetRequiredService<ILogger<PersonDataAccess>>());
+});
+builder.Services.AddTransient(service => new PersonDataService(
+    new PersonDataAccess(
+        service.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
+        service.GetRequiredService<ILogger<PersonDataAccess>>())));
+builder.Host.UseSerilog((hostContext, services, configuration) =>
+{
+    _ = configuration.ReadFrom.Configuration(hostContext.Configuration);
+});
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
-    app.UseWebAssemblyDebugging();
-}
-else
-{
-    app.UseExceptionHandler("/Error");
+    _ = app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    _ = app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -32,9 +42,7 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.UseAuthorization();
-
 
 app.MapRazorPages();
 app.MapControllers();
