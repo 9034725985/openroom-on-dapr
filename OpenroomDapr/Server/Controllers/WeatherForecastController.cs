@@ -26,7 +26,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
-        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Get), nameof(PersonController));
+        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Get), nameof(WeatherForecastController));
         Stopwatch stopwatch = Stopwatch.StartNew();
         IEnumerable<WeatherForecast> result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
         {
@@ -36,10 +36,10 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
         stopwatch.Stop();
-        _logger.LogInformation("End {methodname} in {classname}", nameof(Get), nameof(PersonController));
+        _logger.LogInformation("End {methodname} in {classname}", nameof(Get), nameof(WeatherForecastController));
         _logger.LogInformation("PerfMatters: {methodname} in {classname} returned in {stopwatchmilliseconds} milliseconds",
-            nameof(Get), nameof(PersonController), stopwatch.ElapsedMilliseconds);
-        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Get), nameof(PersonController));
+            nameof(Get), nameof(WeatherForecastController), stopwatch.ElapsedMilliseconds);
+        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Get), nameof(WeatherForecastController));
         return result;
     }
 }
