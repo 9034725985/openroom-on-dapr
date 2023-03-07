@@ -1,9 +1,9 @@
 ﻿@implements IAsyncDisposable
 
 <section>
-    <Button @onclick="() => SetTheme(DisplayMode.Light)">Light</Button>
-    <Button @onclick="() => SetTheme(DisplayMode.Dark)">Dark</Button>
-    <Button @onclick="() => SetTheme(DisplayMode.System)">System</Button>
+    <Button Color="Color.Primary" @onclick="() => SetTheme(DisplayMode.Light)">Light</Button>
+    <Button Color="Color.Secondary" @onclick="() => SetTheme(DisplayMode.Dark)">Dark</Button>
+    <Button Color="Color.Success" @onclick="() => SetTheme(DisplayMode.System)">System</Button>
 </section>
 
 @code {
@@ -20,7 +20,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/displaymode.js");
+        module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./javascript/darktheme.js");
     }
 
     public async Task SetTheme(DisplayMode displayMode)
