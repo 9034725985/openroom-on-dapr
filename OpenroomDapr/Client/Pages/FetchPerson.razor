@@ -29,8 +29,8 @@
         </thead>
         <tbody>
             @foreach (var person in persons)
-            {
-                <tr>
+        {
+            <tr>
                     <td>@person.Id</td>
                     <td>@person.Title</td>
                     <td>@person.LegalName</td>
@@ -39,7 +39,7 @@
                     <td>@person.ExternalId</td>
                     <td>@person.ModifiedDate</td>
                 </tr>
-            }
+        }
         </tbody>
     </table>
 
@@ -53,67 +53,67 @@ else
 
 
 @code {
-    private List<MyPerson> persons = new();
-    private List<MyInteger> myIntegers = new();
-    private string strPersons = "";
+private List<MyPerson> persons = new();
+private List<MyInteger> myIntegers = new();
+private string strPersons = "";
 
-    protected override async Task OnInitializedAsync()
+protected override async Task OnInitializedAsync()
+{
+    try
     {
-        try
+        AuthenticationState? authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        System.Security.Claims.ClaimsPrincipal? user = authstate.User;
+        string name = user.Identity?.Name ?? "Not Sure";
+        persons = await GetAllPersons();
+    }
+    catch (AccessTokenNotAvailableException exception)
+    {
+        exception.Redirect();
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+    }
+}
+
+protected async Task UpdateMyPerson()
+{
+    try
+    {
+        persons = await GetAllPersons();
+        if (persons.Any())
         {
-            AuthenticationState? authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-            System.Security.Claims.ClaimsPrincipal? user = authstate.User;
-            string name = user.Identity?.Name ?? "Not Sure";
+            myIntegers = new();
+            foreach (MyPerson person in persons)
+            {
+                person.ModifiedBy = person.Id;
+                person.ModifiedDate = DateTime.UtcNow;
+                //var response = await Http.PutAsJsonAsync<MyPerson>("Person", person);
+            }
+            var tasks = persons.ToList().Select(person => Http.PutAsJsonAsync<MyPerson>("Person", person));
+            var updateResponse = await Task.WhenAll(tasks);
             persons = await GetAllPersons();
         }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
     }
-
-    protected async Task UpdateMyPerson()
+    catch (AccessTokenNotAvailableException exception)
     {
-        try
-        {
-            persons = await GetAllPersons();
-            if (persons.Any())
-            {
-                myIntegers = new();
-                foreach (MyPerson person in persons)
-                {
-                    person.ModifiedBy = person.Id;
-                    person.ModifiedDate = DateTime.UtcNow;
-                    //var response = await Http.PutAsJsonAsync<MyPerson>("Person", person);
-                }
-                var tasks = persons.ToList().Select(person => Http.PutAsJsonAsync<MyPerson>("Person", person));
-                var updateResponse = await Task.WhenAll(tasks);
-                persons = await GetAllPersons();
-            }
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        exception.Redirect();
     }
+}
 
-    protected async Task<List<MyPerson>> GetAllPersons()
+protected async Task<List<MyPerson>> GetAllPersons()
+{
+    string? strPrivatePersons = await Http.GetStringAsync("Person");
+    Console.WriteLine($"{nameof(strPrivatePersons)} {strPrivatePersons} in ${nameof(GetAllPersons)}");
+    if (!string.IsNullOrWhiteSpace(strPrivatePersons))
     {
-        string? strPrivatePersons = await Http.GetStringAsync("Person");
-        Console.WriteLine($"{nameof(strPrivatePersons)} {strPrivatePersons} in ${nameof(GetAllPersons)}");
-        if (!string.IsNullOrWhiteSpace(strPrivatePersons))
+        strPersons = strPrivatePersons;
+        List<MyPerson>? myPersons = JsonConvert.DeserializeObject<List<MyPerson>>(strPrivatePersons);
+        if (myPersons != null && myPersons.Any())
         {
-            strPersons = strPrivatePersons;
-            List<MyPerson>? myPersons = JsonConvert.DeserializeObject<List<MyPerson>>(strPrivatePersons);
-            if (myPersons != null && myPersons.Any())
-            {
-                return myPersons;
-            }
+            return myPersons;
         }
-        return new();
     }
+    return new();
+}
 }
