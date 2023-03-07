@@ -14,11 +14,13 @@ public class PersonController : ControllerBase
 {
     private readonly ILogger<PersonController> _logger;
     private readonly PersonDataService _service;
+    private readonly FirstPartyAnalyticsService _firstPartyAnalyticsService;
 
-    public PersonController(ILogger<PersonController> logger, PersonDataService service)
+    public PersonController(ILogger<PersonController> logger, PersonDataService service, FirstPartyAnalyticsService firstPartyAnalyticsService)
     {
         _logger = logger;
         _service = service;
+        _firstPartyAnalyticsService = firstPartyAnalyticsService;
     }
 
     [HttpGet]

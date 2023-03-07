@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using OpenroomDapr.Server.Services;
+using OpenroomDapr.Shared;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,9 @@ builder.Services.AddTransient(service => new PersonDataService(
     new PersonDataAccess(
         service.GetRequiredService<IConfiguration>().GetConnectionString("Default")!,
         service.GetRequiredService<ILogger<PersonDataAccess>>())));
+builder.Services.AddTransient(service => new FirstPartyAnalyticsService());
+builder.Services.AddTransient(service => new AppState());
+
 builder.Host.UseSerilog((hostContext, services, configuration) =>
 {
     _ = configuration.ReadFrom.Configuration(hostContext.Configuration);

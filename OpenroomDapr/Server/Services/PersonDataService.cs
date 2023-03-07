@@ -18,6 +18,7 @@ public class PersonDataService
     public async Task<MyInteger> Put(MyPerson person, CancellationToken cancellationToken)
     {
         MyInteger myInteger = await _data.UpdateMyPerson(person, cancellationToken);
+
         return myInteger;
     }
 }

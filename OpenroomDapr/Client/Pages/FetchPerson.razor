@@ -53,48 +53,51 @@ else
 
 
 @code {
-private List<MyPerson> persons = new();
-private List<MyInteger> myIntegers = new();
-private string strPersons = "";
+    private List<MyPerson> persons = new();
+    private List<MyInteger> myIntegers = new();
+    private string strPersons = "";
 
-protected override async Task OnInitializedAsync()
-{
-    try
+    protected override async Task OnInitializedAsync()
     {
-        AuthenticationState? authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-        System.Security.Claims.ClaimsPrincipal? user = authstate.User;
-        string name = user.Identity?.Name ?? "Not Sure";
-        persons = await GetAllPersons();
-    }
-    catch (AccessTokenNotAvailableException exception)
-    {
-        exception.Redirect();
-    }
-    catch (Exception e)
-    {
-        Console.WriteLine(e);
-    }
-}
-
-protected async Task UpdateMyPerson()
-{
-    try
-    {
-        persons = await GetAllPersons();
-        if (persons.Any())
+        try
         {
-            myIntegers = new();
-            foreach (MyPerson person in persons)
-            {
-                person.ModifiedBy = person.Id;
-                person.ModifiedDate = DateTime.UtcNow;
-                //var response = await Http.PutAsJsonAsync<MyPerson>("Person", person);
-            }
-            var tasks = persons.ToList().Select(person => Http.PutAsJsonAsync<MyPerson>("Person", person));
-            var updateResponse = await Task.WhenAll(tasks);
+            AuthenticationState? authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+            System.Security.Claims.ClaimsPrincipal? user = authstate.User;
+            string name = user.Identity?.Name ?? "Not Sure";
             persons = await GetAllPersons();
         }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
+
+    protected async Task UpdateMyPerson()
+    {
+        try
+        {
+            persons = await GetAllPersons();
+            if (persons.Any())
+            {
+                myIntegers = new();
+                foreach (MyPerson person in persons)
+                {
+                    person.ModifiedBy = person.Id;
+                    person.ModifiedDate = DateTime.UtcNow;
+                    //var response = await Http.PutAsJsonAsync<MyPerson>("Person", person);
+                }
+                var tasks = persons.ToList().Select(person => Http.PutAsJsonAsync<MyPerson>("Person", person));
+                var updateResponse = await Task.WhenAll(tasks);
+                persons = await GetAllPersons();
+            }
+            string getAnalytics = $"firstpartyanalytics?key=avocado&value={DateTime.UtcNow.Ticks}";
+            var x = await Http.GetAsync(getAnalytics);
+            Console.WriteLine(x);
+        }
     catch (AccessTokenNotAvailableException exception)
     {
         exception.Redirect();

@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using OpenroomDapr.Shared;
+@inject AppState AppState
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +9,17 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        AppState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        AppState.OnChange -= StateHasChanged;
+    }
+
+}

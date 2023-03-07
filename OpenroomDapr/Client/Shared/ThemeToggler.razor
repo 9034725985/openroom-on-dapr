@@ -1,5 +1,6 @@
-﻿@implements IAsyncDisposable
-
+﻿@using OpenroomDapr.Shared;
+@implements IAsyncDisposable
+@inject AppState AppState
 <section>
     <Button Color="Color.Primary" @onclick="() => SetTheme(DisplayMode.Light)">Light</Button>
     <Button Color="Color.Secondary" @onclick="() => SetTheme(DisplayMode.Dark)">Dark</Button>
@@ -28,6 +29,7 @@
         if (module is not null)
         {
             await module.InvokeVoidAsync("onDisplayModeChanged", $"{displayMode.ToString().ToLower()}");
+            AppState.SetTheme(displayMode.ToString().ToLower());
         }
     }
 
