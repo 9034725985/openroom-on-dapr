@@ -94,9 +94,6 @@ else
                 var updateResponse = await Task.WhenAll(tasks);
                 persons = await GetAllPersons();
             }
-            string getAnalytics = $"firstpartyanalytics?key=avocado&value={DateTime.UtcNow.Ticks}";
-            var x = await Http.GetAsync(getAnalytics);
-            Console.WriteLine(x);
         }
     catch (AccessTokenNotAvailableException exception)
     {
