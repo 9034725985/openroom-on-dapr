@@ -29,11 +29,7 @@ public class PersonDataAccess : IPersonDataAccess
             limit 200
             ;");
         stopwatch.Stop();
-        foreach (MyPerson person in persons)
-        {
-            person.Stopwatch = stopwatch;
-        }
-        _logger.LogDebug("{methodName} returned {result}", nameof(GetPersons), JsonConvert.SerializeObject(persons));
+        _logger.LogDebug("{methodName} returned {result} in {stopwatch} ticks", nameof(GetPersons), JsonConvert.SerializeObject(persons), stopwatch.Elapsed);
         return persons;
     }
 
@@ -49,7 +45,7 @@ public class PersonDataAccess : IPersonDataAccess
             id = person.Id
         });
         stopwatch.Stop();
-        _logger.LogDebug("{methodName} returned {response} for input of {input}", nameof(UpdateMyPerson), response, JsonConvert.SerializeObject(person));
+        _logger.LogDebug("{methodName} returned {response} for input of {input} in {stopwatch} ticks", nameof(UpdateMyPerson), response, JsonConvert.SerializeObject(person), stopwatch.Elapsed);
         MyInteger myInteger = new()
         {
             Value = response,
@@ -58,8 +54,7 @@ public class PersonDataAccess : IPersonDataAccess
             CreatedBy = person.CreatedBy,
             CreatedDate = person.CreatedDate,
             ModifiedBy = person.ModifiedBy,
-            ModifiedDate = person.ModifiedDate,
-            Stopwatch = stopwatch
+            ModifiedDate = person.ModifiedDate
         };
         return myInteger;
     }
