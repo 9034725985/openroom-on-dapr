@@ -6,6 +6,7 @@
 
 main {
     flex: 1;
+    background-image: url("svg/landing_confetti.svg");
 }
 
 .top-row {
