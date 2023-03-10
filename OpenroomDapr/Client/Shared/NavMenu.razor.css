@@ -11,6 +11,12 @@
     font-size: 1.1rem;
 }
 
+#navlogo-sjlkfasjdfldsjfl {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .oi {
     width: 2rem;
     font-size: 1.1rem;
