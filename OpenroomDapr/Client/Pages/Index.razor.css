@@ -1,0 +1,6 @@
+﻿.main {
+    background-image: url("svg/landing_confetti.svg");
+    height: 80dvh;
+    padding: 5dvh;
+    border: 1px solid red;
+}
