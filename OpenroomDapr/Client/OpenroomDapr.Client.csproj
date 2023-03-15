@@ -10,15 +10,15 @@
 		<PackageReference Include="Blazorise.Animate" Version="1.2.1" />
 		<PackageReference Include="Blazorise.Bootstrap5" Version="1.2.1" />
 		<PackageReference Include="Blazorise.Icons.FontAwesome" Version="1.2.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.3" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Authentication.WebAssembly.Msal" Version="7.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
 		<PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.9.5">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
