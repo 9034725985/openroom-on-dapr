@@ -8,36 +8,36 @@
 </section>
 
 @code {
-    public enum DisplayMode
-    {
-        Light,
-        Dark,
-        System
-    }
+public enum DisplayMode
+{
+Light,
+Dark,
+System
+}
 
-    private IJSObjectReference? module;
+private IJSObjectReference? module;
 
-    [Inject] private IJSRuntime JSRuntime { get; set; } = default!;
+[Inject] private IJSRuntime JSRuntime { get; set; } = default!;
 
-    protected override async Task OnInitializedAsync()
-    {
-        module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./javascript/darktheme.js");
-    }
+protected override async Task OnInitializedAsync()
+{
+module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./javascript/darktheme.js");
+}
 
-    public async Task SetTheme(DisplayMode displayMode)
-    {
-        if (module is not null)
-        {
-            await module.InvokeVoidAsync("onDisplayModeChanged", $"{displayMode.ToString().ToLower()}");
-            AppState.SetTheme(displayMode.ToString().ToLower());
-        }
-    }
+public async Task SetTheme(DisplayMode displayMode)
+{
+if (module is not null)
+{
+    await module.InvokeVoidAsync("onDisplayModeChanged", $"{displayMode.ToString().ToLower()}");
+    AppState.SetTheme(displayMode.ToString().ToLower());
+}
+}
 
-    async ValueTask IAsyncDisposable.DisposeAsync()
-    {
-        if (module is not null)
-        {
-            await module.DisposeAsync();
-        }
-    }
+async ValueTask IAsyncDisposable.DisposeAsync()
+{
+if (module is not null)
+{
+    await module.DisposeAsync();
+}
+}
 }

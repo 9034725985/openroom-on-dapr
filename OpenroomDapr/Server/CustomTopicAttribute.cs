@@ -11,33 +11,32 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 
-namespace ControllerSample
+namespace OpenroomDapr.Server;
+
+using System;
+using Dapr;
+
+/// <summary>
+/// Sample custom <see cref="ITopicMetadata" /> implementation that returns topic metadata from environment variables.
+/// </summary>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+public class CustomTopicAttribute : Attribute, ITopicMetadata
 {
-    using System;
-    using Dapr;
-
-    /// <summary>
-    /// Sample custom <see cref="ITopicMetadata" /> implementation that returns topic metadata from environment variables.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class CustomTopicAttribute : Attribute, ITopicMetadata
+    public CustomTopicAttribute(string pubsubName, string name)
     {
-        public CustomTopicAttribute(string pubsubName, string name)
-        {
-            this.PubsubName = Environment.ExpandEnvironmentVariables(pubsubName);
-            this.Name = Environment.ExpandEnvironmentVariables(name);
-        }
-
-        /// <inheritdoc/>
-        public string PubsubName { get; }
-
-        /// <inheritdoc/>
-        public string Name { get; }
-
-        /// <inheritdoc/>
-        public new string Match { get; }
-
-        /// <inheritdoc/>
-        public int Priority { get; }
+        PubsubName = Environment.ExpandEnvironmentVariables(pubsubName);
+        Name = Environment.ExpandEnvironmentVariables(name);
     }
+
+    /// <inheritdoc/>
+    public string PubsubName { get; }
+
+    /// <inheritdoc/>
+    public string Name { get; }
+
+    /// <inheritdoc/>
+    public new string Match { get; }
+
+    /// <inheritdoc/>
+    public int Priority { get; }
 }

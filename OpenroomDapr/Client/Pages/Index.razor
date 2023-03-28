@@ -14,14 +14,14 @@
 
 @code {
 
-    protected override void OnInitialized()
-    {
-        AppState.OnChange += StateHasChanged;
-    }
+protected override void OnInitialized()
+{
+AppState.OnChange += StateHasChanged;
+}
 
-    public void Dispose()
-    {
-        AppState.OnChange -= StateHasChanged;
-    }
+public void Dispose()
+{
+AppState.OnChange -= StateHasChanged;
+}
 
 }

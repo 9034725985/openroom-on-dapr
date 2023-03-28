@@ -28,14 +28,14 @@ else
         </thead>
         <tbody>
             @foreach (var forecast in forecasts)
-        {
-            <tr>
+{
+    <tr>
                     <td>@forecast.Date.ToShortDateString()</td>
                     <td>@forecast.TemperatureC</td>
                     <td>@forecast.TemperatureF</td>
                     <td>@forecast.Summary</td>
                 </tr>
-        }
+}
         </tbody>
     </table>
 }
@@ -45,13 +45,13 @@ private WeatherForecast[]? forecasts;
 
 protected override async Task OnInitializedAsync()
 {
-    try
-    {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-    }
-    catch (AccessTokenNotAvailableException exception)
-    {
-        exception.Redirect();
-    }
+try
+{
+forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+}
+catch (AccessTokenNotAvailableException exception)
+{
+exception.Redirect();
+}
 }
 }
