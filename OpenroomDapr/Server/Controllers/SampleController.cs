@@ -220,12 +220,24 @@ public class SampleController : ControllerBase
     public async Task<ActionResult<Account>> RawDeposit([FromBody] JsonDocument rawTransaction, [FromServices] DaprClient daprClient)
     {
         var transactionString = rawTransaction.RootElement.GetProperty("data_base64").GetString();
-        logger.LogInformation($"Enter deposit: {transactionString} - {Encoding.UTF8.GetString(Convert.FromBase64String(transactionString))}");
-        var transactionJson = JsonSerializer.Deserialize<JsonDocument>(Convert.FromBase64String(transactionString));
+        if (string.IsNullOrWhiteSpace(transactionString))
+        {
+            return BadRequest(new { statusCode = 400, message = "bad request" });
+        }
+        logger.LogInformation("Enter deposit: {transactionString} - {encodedString}", transactionString, Encoding.UTF8.GetString(Convert.FromBase64String(transactionString)));
+        JsonDocument? transactionJson = JsonSerializer.Deserialize<JsonDocument>(Convert.FromBase64String(transactionString));
+        if (transactionJson == null)
+        {
+            return BadRequest(new { statusCode = 400, message = "bad request" });
+        }
         var transaction = JsonSerializer.Deserialize<Transaction>(transactionJson.RootElement.GetProperty("data").GetRawText());
+        if (transaction == null)
+        {
+            return BadRequest(new { statusCode = 400, message = "bad request" });
+        }
         var state = await daprClient.GetStateEntryAsync<Account>(StoreName, transaction.Id);
         state.Value ??= new Account() { Id = transaction.Id, };
-        logger.LogInformation("Id is {0}, the amount to be deposited is {1}", transaction.Id, transaction.Amount);
+        logger.LogInformation("Id is {id}, the amount to be deposited is {amount}", transaction.Id, transaction.Amount);
 
         if (transaction.Amount < 0m)
         {

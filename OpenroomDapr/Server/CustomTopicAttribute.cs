@@ -35,7 +35,7 @@ public class CustomTopicAttribute : Attribute, ITopicMetadata
     public string Name { get; }
 
     /// <inheritdoc/>
-    public new string Match { get; }
+    public new string Match { get; } = string.Empty;
 
     /// <inheritdoc/>
     public int Priority { get; }

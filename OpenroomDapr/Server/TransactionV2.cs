@@ -36,5 +36,5 @@ public class TransactionV2
     /// Gets or sets channel from which this transaction was received.
     /// </summary>
     [Required]
-    public string Channel { get; set; }
+    public string Channel { get; set; } = string.Empty;
 }
