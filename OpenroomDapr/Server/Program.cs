@@ -1,7 +1,9 @@
+using Dapr;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using OpenroomDapr.Server.Services;
 using OpenroomDapr.Shared;
+using OpenroomDapr.Shared.Model;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -56,4 +58,9 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-app.Run();
+app.MapPost("/orders", [Topic("pubsub", "mypersons")] (MyPerson person) =>
+{
+    return Results.Ok(person.LegalName);
+});
+
+app.RunAsync();
