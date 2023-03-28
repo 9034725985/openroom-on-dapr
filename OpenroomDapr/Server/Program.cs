@@ -31,6 +31,7 @@ builder.Host.UseSerilog((hostContext, services, configuration) =>
     _ = configuration.ReadFrom.Configuration(hostContext.Configuration);
 });
 builder.Services.AddDaprSidekick();
+builder.Services.AddDaprClient();
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
