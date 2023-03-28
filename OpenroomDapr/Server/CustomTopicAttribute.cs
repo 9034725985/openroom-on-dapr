@@ -13,8 +13,8 @@
 
 namespace OpenroomDapr.Server;
 
-using System;
 using Dapr;
+using System;
 
 /// <summary>
 /// Sample custom <see cref="ITopicMetadata" /> implementation that returns topic metadata from environment variables.

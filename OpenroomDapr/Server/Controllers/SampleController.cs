@@ -13,17 +13,17 @@
 
 namespace OpenroomDapr.Server.Controllers;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Dapr;
 using Dapr.AspNetCore;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenroomDapr.Server;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Sample showing Dapr integration with controller.

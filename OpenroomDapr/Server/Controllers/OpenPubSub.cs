@@ -1,10 +1,7 @@
 using Dapr;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
-using OpenroomDapr.Shared;
 using OpenroomDapr.Shared.Model;
-using System;
 
 namespace OpenroomDapr.Server.Controllers;
 
