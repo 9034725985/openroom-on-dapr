@@ -24,7 +24,7 @@ public class TransactionV2
     /// Gets or sets account id for the transaction.
     /// </summary>
     [Required]
-    public string Id { get; set; }
+    public string Id { get; set; } = "1";
 
     /// <summary>
     /// Gets or sets amount for the transaction.
