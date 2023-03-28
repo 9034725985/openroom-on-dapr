@@ -1,3 +1,4 @@
+using Azure.Core.GeoJson;
 using Dapr;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
@@ -5,6 +6,7 @@ using OpenroomDapr.Server.Services;
 using OpenroomDapr.Shared;
 using OpenroomDapr.Shared.Model;
 using Serilog;
+using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -58,9 +60,16 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-app.MapPost("/orders", [Topic("pubsub", "mypersons")] (MyPerson person) =>
+app.MapGet("/numberpublisher", async (int input) =>
 {
-    return Results.Ok(person.LegalName);
+    using var client = new Dapr.Client.DaprClientBuilder().Build();
+    await client.PublishEventAsync("pubsub", "mynumbers", input);
+    return Results.Ok(input);
 });
 
-app.RunAsync();
+app.MapGet("/numbersubscriber", [Topic("pubsub", "mynumbers")] (int input) =>
+{
+    return Results.Ok(input);
+});
+
+app.Run();
