@@ -52,7 +52,7 @@ public class OpenPubSubController : ControllerBase
 
     [HttpGet("subscribe")]
     [Topic("pubsub", "mypersons")]
-    public ActionResult<MyPerson> Subscribe([FromBody] JsonDocument raw, [FromServices] DaprClient daprClient)
+    public ActionResult<MyPerson> Subscribe([FromServices] DaprClient daprClient)
     {
         _logger.LogInformation("Begin {methodname} in {classname}", nameof(Subscribe), nameof(WeatherForecastController));
         MyPerson person = new()
