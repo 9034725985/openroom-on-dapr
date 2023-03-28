@@ -1,20 +1,13 @@
 using Dapr;
+using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 using OpenroomDapr.Shared.Model;
+using System.Text.Json;
 
 namespace OpenroomDapr.Server.Controllers;
 
-[ApiController]
-[Route("[controller]")]
-[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class OpenPubSubController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
     private readonly ILogger<OpenPubSubController> _logger;
 
     public OpenPubSubController(ILogger<OpenPubSubController> logger)
@@ -22,8 +15,8 @@ public class OpenPubSubController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    public ActionResult<MyPerson> Publish()
+    [HttpGet("daprgreet")]
+    public async Task<ActionResult<MyPerson>> Greet([FromServices] DaprClient daprClient)
     {
         _logger.LogInformation("Begin {methodname} in {classname}", nameof(Publish), nameof(WeatherForecastController));
         MyPerson person = new()
@@ -34,13 +27,32 @@ public class OpenPubSubController : ControllerBase
             Title = "Mr",
             Alias = "v-abrahamlincoln"
         };
+        await daprClient.PublishEventAsync("pubsub", "mypersons", person);
         _logger.LogInformation("End {methodname} in {classname}", nameof(Publish), nameof(WeatherForecastController));
         return Ok(person);
     }
 
-    [HttpGet]
-    [Topic("orderpubsub", "orders")]
-    public ActionResult<MyPerson> Subscribe()
+
+    [HttpGet("publish")]
+    public async Task<ActionResult<MyPerson>> Publish([FromServices] DaprClient daprClient)
+    {
+        _logger.LogInformation("Begin {methodname} in {classname}", nameof(Publish), nameof(WeatherForecastController));
+        MyPerson person = new()
+        {
+            LegalName = "Abraham Lincoln",
+            PreferredName = "Abe",
+            Id = 16,
+            Title = "Mr",
+            Alias = "v-abrahamlincoln"
+        };
+        await daprClient.PublishEventAsync("pubsub", "mypersons", person);
+        _logger.LogInformation("End {methodname} in {classname}", nameof(Publish), nameof(WeatherForecastController));
+        return Ok(person);
+    }
+
+    [HttpGet("subscribe")]
+    [Topic("pubsub", "mypersons")]
+    public ActionResult<MyPerson> Subscribe([FromBody] JsonDocument raw, [FromServices] DaprClient daprClient)
     {
         _logger.LogInformation("Begin {methodname} in {classname}", nameof(Subscribe), nameof(WeatherForecastController));
         MyPerson person = new()

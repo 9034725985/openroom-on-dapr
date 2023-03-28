@@ -42,6 +42,8 @@ if (!app.Environment.IsDevelopment())
     _ = app.UseHsts();
 }
 
+app.MapSubscribeHandler();
+
 app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
