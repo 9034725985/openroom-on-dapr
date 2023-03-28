@@ -72,4 +72,4 @@ app.MapGet("/numbersubscriber", [Topic("pubsub", "mynumbers")] (int input) =>
     return Results.Ok(input);
 });
 
-app.Run();
+await app.RunAsync();
