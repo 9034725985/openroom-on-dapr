@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Man.Dapr.Sidekick;
+using Microsoft.AspNetCore.Mvc;
 using OpenroomDapr.Server.Services;
 
 namespace OpenroomDapr.Server.Controllers
@@ -25,5 +26,16 @@ namespace OpenroomDapr.Server.Controllers
                 nameof(Index), nameof(FirstPartyAnalyticsController), stopwatch.ElapsedMilliseconds);
             return result;
         }
+
+        [HttpGet("status")]
+        public ActionResult GetStatus(
+            [FromServices] IDaprSidecarHost daprSidecarHost) => Ok(new
+            {
+                process = daprSidecarHost.GetProcessInfo(), // Information about the sidecar process such as if it is running
+                options = daprSidecarHost.GetProcessOptions() // the sidecar options if running, including ports and locations 
+            });
+
+        [HttpGet("greet")]
+        public ActionResult GetGreeting() => Ok("hello, world!");
     }
 }
