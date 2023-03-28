@@ -11,21 +11,20 @@
 // limitations under the License.
 // ------------------------------------------------------------------------
 
-namespace ControllerSample
+namespace OpenroomDapr.Server;
+
+/// <summary>
+/// Class representing an Account for samples.
+/// </summary>
+public class Account
 {
     /// <summary>
-    /// Class representing an Account for samples.
+    /// Gets or sets account id.
     /// </summary>
-    public class Account
-    {
-        /// <summary>
-        /// Gets or sets account id.
-        /// </summary>
-        public string Id { get; set; } = "1";
+    public string Id { get; set; } = "1";
 
-        /// <summary>
-        /// Gets or sets account balance.
-        /// </summary>
-        public decimal Balance { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets account balance.
+    /// </summary>
+    public decimal Balance { get; set; }
 }

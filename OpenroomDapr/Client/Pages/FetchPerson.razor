@@ -61,18 +61,18 @@ protected override async Task OnInitializedAsync()
 {
 try
 {
-    AuthenticationState? authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-    System.Security.Claims.ClaimsPrincipal? user = authstate.User;
-    string name = user.Identity?.Name ?? "Not Sure";
-    persons = await GetAllPersons();
+AuthenticationState? authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+System.Security.Claims.ClaimsPrincipal? user = authstate.User;
+string name = user.Identity?.Name ?? "Not Sure";
+persons = await GetAllPersons();
 }
 catch (AccessTokenNotAvailableException exception)
 {
-    exception.Redirect();
+exception.Redirect();
 }
 catch (Exception e)
 {
-    Console.WriteLine(e);
+Console.WriteLine(e);
 }
 }
 
@@ -80,20 +80,20 @@ protected async Task UpdateMyPerson()
 {
 try
 {
-    persons = await GetAllPersons();
-    if (persons.Any())
+persons = await GetAllPersons();
+if (persons.Any())
+{
+    myIntegers = new();
+    foreach (MyPerson person in persons)
     {
-        myIntegers = new();
-        foreach (MyPerson person in persons)
-        {
-            person.ModifiedBy = person.Id;
-            person.ModifiedDate = DateTime.UtcNow;
-            //var response = await Http.PutAsJsonAsync<MyPerson>("Person", person);
-        }
-        var tasks = persons.ToList().Select(person => Http.PutAsJsonAsync<MyPerson>("Person", person));
-        var updateResponse = await Task.WhenAll(tasks);
-        persons = await GetAllPersons();
+        person.ModifiedBy = person.Id;
+        person.ModifiedDate = DateTime.UtcNow;
+        //var response = await Http.PutAsJsonAsync<MyPerson>("Person", person);
     }
+    var tasks = persons.ToList().Select(person => Http.PutAsJsonAsync<MyPerson>("Person", person));
+    var updateResponse = await Task.WhenAll(tasks);
+    persons = await GetAllPersons();
+}
 }
 catch (AccessTokenNotAvailableException exception)
 {
@@ -111,7 +111,7 @@ strPersons = strPrivatePersons;
 List<MyPerson>? myPersons = JsonConvert.DeserializeObject<List<MyPerson>>(strPrivatePersons);
 if (myPersons != null && myPersons.Any())
 {
-    return myPersons;
+return myPersons;
 }
 }
 return new();
